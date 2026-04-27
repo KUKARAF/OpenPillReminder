@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dev.mariinkys.openPillReminder.data.SettingsRepository
 import dev.mariinkys.openPillReminder.model.SettingsState
+import dev.mariinkys.openPillReminder.worker.ReminderScheduler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -23,6 +24,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun updateSettings(newSettings: SettingsState) {
         viewModelScope.launch {
             repository.saveSettings(newSettings)
+
+            if (newSettings.active) {
+                ReminderScheduler.schedule(getApplication(), newSettings.reminderTime)
+            } else {
+                ReminderScheduler.cancel(getApplication())
+            }
         }
     }
 }
