@@ -89,7 +89,7 @@ fun AppLayout(
     }
 
     var selectedTab by remember { mutableIntStateOf(0) }
-    val settings by settingsViewModel.settings.collectAsState()
+    val settings by settingsViewModel.uiState.collectAsState()
 
     val tabs = listOf(
         Pair("Home", Icons.Default.Home),

@@ -71,7 +71,10 @@ fun SettingsScreen(
         // Active Pills
         OutlinedTextField(
             value = if (settings.activePills == 0) "" else settings.activePills.toString(),
-            onValueChange = { onSettingsChange(settings.copy(activePills = it.toIntOrNull() ?: 0)) },
+            onValueChange = { input ->
+                val numericInput = input.filter { it.isDigit() }
+                onSettingsChange(settings.copy(activePills = numericInput.toIntOrNull() ?: 0))
+            },
             label = { Text("Active pills") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

@@ -6,30 +6,46 @@ import androidx.lifecycle.viewModelScope
 import dev.mariinkys.openPillReminder.data.SettingsRepository
 import dev.mariinkys.openPillReminder.model.SettingsState
 import dev.mariinkys.openPillReminder.worker.ReminderScheduler
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@OptIn(kotlinx.coroutines.FlowPreview::class)
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = SettingsRepository(application)
 
-    val settings: StateFlow<SettingsState> = repository.settingsFlow.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = SettingsState()
-    )
+    private val _uiState = MutableStateFlow(SettingsState())
+    val uiState: StateFlow<SettingsState> = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            // Load initial data once
+            val initialSettings = repository.settingsFlow.first()
+            _uiState.value = initialSettings
+
+            // Save changes with debounce
+            _uiState
+                .debounce(500L)
+                .collect { latestSettings ->
+                    saveToDisk(latestSettings)
+                }
+        }
+    }
 
     fun updateSettings(newSettings: SettingsState) {
-        viewModelScope.launch {
-            repository.saveSettings(newSettings)
+        _uiState.value = newSettings
+    }
 
-            if (newSettings.active) {
-                ReminderScheduler.schedule(getApplication(), newSettings.reminderTime)
-            } else {
-                ReminderScheduler.cancel(getApplication())
-            }
+    private suspend fun saveToDisk(settings: SettingsState) {
+        repository.saveSettings(settings)
+        if (settings.active) {
+            ReminderScheduler.schedule(getApplication(), settings.reminderTime)
+        } else {
+            ReminderScheduler.cancel(getApplication())
         }
     }
 }
