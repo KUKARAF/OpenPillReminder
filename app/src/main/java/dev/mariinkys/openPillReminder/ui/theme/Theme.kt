@@ -36,10 +36,12 @@ fun OpenPillReminderTheme(
 }
 
 private fun generateColorSchemeFromSeed(seedColor: Int, isDark: Boolean): ColorScheme {
-
     val base = Color(seedColor)
 
+
     return if (isDark) {
+        val darkSurface = Color(0xFF121212)
+
         darkColorScheme(
             primary = base,
             onPrimary = Color.White,
@@ -53,8 +55,12 @@ private fun generateColorSchemeFromSeed(seedColor: Int, isDark: Boolean): ColorS
             onTertiary = Color.White,
             surface = Color(0xFF121212),
             onSurface = Color.White,
+            background = darkSurface,
+            surfaceVariant = darkSurface,
         )
     } else {
+        val lightSurface = Color.White
+
         lightColorScheme(
             primary = base,
             onPrimary = Color.White,
@@ -68,6 +74,8 @@ private fun generateColorSchemeFromSeed(seedColor: Int, isDark: Boolean): ColorS
             onTertiary = Color.Black,
             surface = Color.White,
             onSurface = Color.Black,
+            background = lightSurface,
+            surfaceVariant = lightSurface,
         )
     }
 }
