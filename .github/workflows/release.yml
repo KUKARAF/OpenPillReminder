@@ -49,9 +49,21 @@ jobs:
           # Security: Shred the temporary keystore
           rm -f release.jks
 
+      - name: Generate APK Hash
+        id: generate_hash
+        run: |
+          sha256=$(sha256sum OpenPillReminder-${{ github.event.release.tag_name }}.apk | awk '{ print $1 }')
+          echo "apk_sha=$sha256" >> $GITHUB_OUTPUT
+          echo "SHA-256 Hash of APK: $sha256"
+
       - name: Upload APK to Release
         uses: softprops/action-gh-release@v2
         with:
           files: OpenPillReminder-${{ github.event.release.tag_name }}.apk
+          append_body: true
+          body: |
+            ---
+            ### Security Verification
+            **APK SHA-256 Hash:** `${{ steps.generate_hash.outputs.apk_sha }}`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
