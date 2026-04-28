@@ -28,6 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.font.FontWeight
 import dev.mariinkys.openPillReminder.model.SettingsState
 import dev.mariinkys.openPillReminder.model.ThemeMode
 import java.time.Instant
@@ -179,6 +181,78 @@ fun SettingsScreen(
                 }
             }
         }
+
+        // ABOUT
+        val uriHandler = LocalUriHandler.current
+        SettingsSection(title = "About") {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { uriHandler.openUri("https://github.com/mariinkys") }
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Author",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = "mariinkys",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            // Repository Link
+            TextButton(
+                onClick = { uriHandler.openUri("https://github.com/mariinkys/OpenPillReminder") },
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                    Text("View Repository", style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+
+            // Issues Link
+            TextButton(
+                onClick = { uriHandler.openUri("https://github.com/mariinkys/OpenPillReminder/issues") },
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                    Text("Report an Issue", style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+
+            // License Link
+            TextButton(
+                onClick = { uriHandler.openUri("https://github.com/mariinkys/OpenPillReminder/blob/main/LICENSE") },
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                    Text("License Info (GPL-3.0)", style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+
+            // Donation Link
+            Button(
+                onClick = { uriHandler.openUri("https://www.buymeacoffee.com/mariinkys") },
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                )
+            ) {
+                Text("Support the Project ❤️")
+            }
+        }
+
+        // Add some bottom padding to ensure the last section isn't cut off
+        Spacer(modifier = Modifier.height(32.dp))
     }
 
     // Color Picker Dialog
