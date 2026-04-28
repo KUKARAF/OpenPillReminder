@@ -36,54 +36,38 @@ fun OpenPillReminderTheme(
 }
 
 private fun generateColorSchemeFromSeed(seedColor: Int, isDark: Boolean): ColorScheme {
-    // Derive tonal variations by blending with black/white
-    fun tone(color: Int, factor: Float): Color {
-        val blend = if (factor > 0) 0xFFFFFFFF.toInt() else 0xFF000000.toInt()
-        val amount = kotlin.math.abs(factor)
-        val r = ((color shr 16 and 0xFF) * (1 - amount) + (blend shr 16 and 0xFF) * amount).toInt()
-        val g = ((color shr 8 and 0xFF) * (1 - amount) + (blend shr 8 and 0xFF) * amount).toInt()
-        val b = ((color and 0xFF) * (1 - amount) + (blend and 0xFF) * amount).toInt()
-        return Color(r, g, b)
-    }
 
-    fun luminance(color: Int): Float {
-        val r = (color shr 16 and 0xFF) / 255f
-        val g = (color shr 8 and 0xFF) / 255f
-        val b = (color and 0xFF) / 255f
-        return 0.2126f * r + 0.7152f * g + 0.0722f * b
-    }
-
-    val onSeedColor = if (luminance(seedColor) > 0.5f) Color.Black else Color.White
+    val base = Color(seedColor)
 
     return if (isDark) {
         darkColorScheme(
-            primary = tone(seedColor, 0.6f),
-            onPrimary = Color.Black,
-            primaryContainer = tone(seedColor, -0.2f),
-            onPrimaryContainer = tone(seedColor, 0.8f),
-            secondary = tone(seedColor, 0.4f),
-            onSecondary = Color.Black,
-            secondaryContainer = tone(seedColor, -0.3f),
-            onSecondaryContainer = tone(seedColor, 0.7f),
-            tertiary = tone(seedColor, 0.5f),
-            onTertiary = Color.Black,
-            tertiaryContainer = tone(seedColor, -0.25f),
-            onTertiaryContainer = tone(seedColor, 0.75f),
+            primary = base,
+            onPrimary = Color.White,
+            primaryContainer = base.copy(alpha = 0.7f),
+            onPrimaryContainer = Color.White,
+            secondary = base.copy(alpha = 0.85f),
+            onSecondary = Color.White,
+            secondaryContainer = base.copy(alpha = 0.6f),
+            onSecondaryContainer = Color.White,
+            tertiary = base.copy(alpha = 0.75f),
+            onTertiary = Color.White,
+            surface = Color(0xFF121212),
+            onSurface = Color.White,
         )
     } else {
         lightColorScheme(
-            primary = Color(seedColor),
-            onPrimary = onSeedColor,
-            primaryContainer = tone(seedColor, 0.8f),
-            onPrimaryContainer = tone(seedColor, -0.6f),
-            secondary = tone(seedColor, -0.2f),
-            onSecondary = onSeedColor,
-            secondaryContainer = tone(seedColor, 0.7f),
-            onSecondaryContainer = tone(seedColor, -0.5f),
-            tertiary = tone(seedColor, -0.1f),
-            onTertiary = onSeedColor,
-            tertiaryContainer = tone(seedColor, 0.75f),
-            onTertiaryContainer = tone(seedColor, -0.55f),
+            primary = base,
+            onPrimary = Color.White,
+            primaryContainer = base.copy(alpha = 0.2f),
+            onPrimaryContainer = Color.Black,
+            secondary = base.copy(alpha = 0.3f),
+            onSecondary = Color.Black,
+            secondaryContainer = base.copy(alpha = 0.15f),
+            onSecondaryContainer = Color.Black,
+            tertiary = base.copy(alpha = 0.25f),
+            onTertiary = Color.Black,
+            surface = Color.White,
+            onSurface = Color.Black,
         )
     }
 }
