@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew assembleRelease
 
       - name: Sign and Align APK
-        id: process_apk
+        id: final_process
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           ALIAS: ${{ secrets.ALIAS }}
@@ -56,20 +56,10 @@ jobs:
           # 7. Set output for the next step
           echo "apk_name=OpenPillReminder-latest.apk" >> $GITHUB_OUTPUT
 
-      - name: Rename and Hash APK
-        id: process_apk
-        run: |
-          NAME="OpenPillReminder-latest.apk"
-          mv ${{ steps.sign_app.outputs.signedReleaseFile }} "$NAME"
-          
-          sha256=$(sha256sum "$NAME" | awk '{ print $1 }')
-          echo "SHA-256 Hash of APK: $sha256"
-          echo "apk_name=$NAME" >> $GITHUB_OUTPUT
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
           name: OpenPillReminder-Production-Build
-          path: ${{ steps.process_apk.outputs.apk_name }}
+          path: ${{ steps.final_process.outputs.apk_name }}
           if-no-files-found: error
           retention-days: 3
