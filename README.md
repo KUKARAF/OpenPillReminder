@@ -12,6 +12,7 @@
   <img alt="Main Window" width="320" src="resources/screenshots/main-light.png"/>
   <img alt="Settings Window" width="320" src="resources/screenshots/settings-light.png"/>
 
+  # [Android will become a locked-down platform, FIGHT BACK!](https://keepandroidopen.org/)
 </div>
 
 ## App Description
