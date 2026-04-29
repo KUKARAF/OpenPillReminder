@@ -22,16 +22,33 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      - name: Sign APK
+      - name: Sign and Align APK
         id: sign_app
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-          buildToolsVersion: "35.0.0"
+        run: |
+          # 1. Find the latest build tools 
+          BUILD_TOOLS_PATH=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
+          echo "Using Build Tools from: $BUILD_TOOLS_PATH"
+          
+          # 2. Decode the keystore from secrets
+          echo "${{ secrets.SIGNING_KEY }}" | base64 -d > release.jks
+          
+          # 3. Align the APK 
+          $BUILD_TOOLS_PATH/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk OpenPillReminder-latest-aligned.apk
+          
+          # 4. Sign the aligned APK
+          $BUILD_TOOLS_PATH/apksigner sign --ks release.jks \
+            --ks-key-alias "${{ secrets.ALIAS }}" \
+            --ks-pass pass:"${{ secrets.KEY_PASSWORD }}" \
+            --key-pass pass:"${{ secrets.KEY_PASSWORD }}" \
+            --out OpenPillReminder-latest.apk \
+            OpenPillReminder-latest-aligned.apk
+          
+          # 5. Clean up the sensitive JKS file
+          rm release.jks
+          
+          # 6. Generate hash for verification
+          sha256=$(sha256sum OpenPillReminder-latest.apk | awk '{ print $1 }')
+          echo "apk_sha=$sha256" >> $GITHUB_OUTPUT
 
       - name: Rename and Hash APK
         id: process_apk
