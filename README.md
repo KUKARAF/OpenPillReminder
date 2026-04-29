@@ -14,6 +14,23 @@
 
 </div>
 
+## App Description
+
+Open Pill Reminder is a simple and reliable way to stay on track with your birth control routine. Setup takes just a moment; select the type of pill pack you use (number of pills) and choose the time you usually take your pill. From there, Open Pill Reminder will send you discreet notifications so you never miss a dose. You can also easily view the status of your current pack at any time.
+
+Open Pill Reminder helps you manage your birth control routine with ease—simply, effectively, and for free (no ads too).
+
+Features:
+
+- Daily reminders so you don’t forget your pill
+- Automatic pause of reminders on days when no pill is required
+- Notifications instead of intrusive alarms
+- Alerts when it’s time to start a new pack or purchase more pills
+- Customizable pack size to support all types of birth control pills
+- Clear display of your current pack status
+
+Note: Certain device settings or third-party apps may interfere with notifications. Open Pill Reminder should be used as a supportive tool and not as your sole reminder system. We are not responsible for missed pills due to notification issues.
+
 ## Security & Verification
 
 To ensure the integrity of the app, you can verify the signing certificate fingerprint. This fingerprint should match regardless of the version:
