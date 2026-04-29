@@ -27,27 +27,29 @@ jobs:
 
       - name: Sign and Align APK
         env:
-          KEYSTORE_BASE64: ${{ secrets.SIGNING_KEY }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ALIAS }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          ALIAS: ${{ secrets.ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          # Decode keystore
-          echo "$KEYSTORE_BASE64" | base64 -d > release.jks
+          # 1. Find build tools
+          BUILD_TOOLS_PATH=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
           
-          # Find apksigner
-          SDK_PATH=$ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools | sort -r | head -n 1)
+          # 2. Decode keystore from the env variable
+          echo "$SIGNING_KEY" | base64 -d > release.jks
           
-          # Sign the APK
-          $SDK_PATH/apksigner sign --ks release.jks \
-            --ks-key-alias "$KEY_ALIAS" \
-            --ks-pass pass:"$KEYSTORE_PASSWORD" \
+          # 3. Align the APK
+          $BUILD_TOOLS_PATH/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk aligned.apk
+          
+          # 4. Sign the APK using env variables
+          $BUILD_TOOLS_PATH/apksigner sign --ks release.jks \
+            --ks-key-alias "$ALIAS" \
+            --ks-pass pass:"$KEY_PASSWORD" \
             --key-pass pass:"$KEY_PASSWORD" \
             --out OpenPillReminder-${{ github.event.release.tag_name }}.apk \
-            app/build/outputs/apk/release/app-release-unsigned.apk
+            aligned.apk
           
-          # Security: Shred the temporary keystore
-          rm -f release.jks
+          # 6. Cleanup
+          rm release.jks aligned.apk
 
       - name: Generate APK Hash
         id: generate_hash
