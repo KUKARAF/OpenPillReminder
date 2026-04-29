@@ -17,3 +17,6 @@ local.properties
 *.keystore
 *.p12
 /app/release
+/gradle/wrapper
+gradlew
+gradlew.bat
