@@ -137,7 +137,7 @@ fun HomeScreen(
         }
     }
 
-    // Dialog handling
+    // dialog handling
     selectedDate?.let { date ->
         val absoluteIndex = allDates.indexOf(date)
         val positionInCycle = if (cycleLength > 0) absoluteIndex % cycleLength else 0

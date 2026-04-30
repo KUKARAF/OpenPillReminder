@@ -48,12 +48,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     init {
         viewModelScope.launch {
-            // Load initial data once
             val initialSettings = repository.settingsFlow.first()
             _uiState.value = initialSettings
             _isLoaded.value = true
 
-            // Save changes with debounce
             _uiState
                 .debounce(500L)
                 .collect { latestSettings ->

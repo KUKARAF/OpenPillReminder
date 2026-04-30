@@ -27,7 +27,7 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
 
     val intent = Intent(context, MainActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP // Don't restart the app if it's open
-        putExtra("OPEN_LOG_DATE", date.toString()) // Pass the date as a string
+        putExtra("OPEN_LOG_DATE", date.toString())
     }
 
     val pendingIntent = PendingIntent.getActivity(

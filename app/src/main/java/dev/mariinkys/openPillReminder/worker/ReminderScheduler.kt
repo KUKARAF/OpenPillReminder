@@ -39,7 +39,7 @@ object ReminderScheduler {
                 pendingIntent
             )
         } catch (e: SecurityException) {
-            // Handle Android 14+ case where SCHEDULE_EXACT_ALARM permission is revoked
+            // TODO: handle Android 14+ case where SCHEDULE_EXACT_ALARM permission is revoked
         }
     }
 
@@ -63,7 +63,7 @@ object ReminderScheduler {
         try {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent)
         } catch (e: SecurityException) {
-            // Handle Android 14+ case where SCHEDULE_EXACT_ALARM permission is revoked
+            // TODO: handle Android 14+ case where SCHEDULE_EXACT_ALARM permission is revoked
         }
     }
 

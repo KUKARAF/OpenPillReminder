@@ -162,7 +162,7 @@ fun SettingsScreen(
             }
         }
 
-        // Pill Buying Reminder
+        // PILL BUYING REMINDER
         SettingsSection(title = "Pill Buying Reminder") {
             SettingsSwitchRow(
                 label = "Enable Buying Reminder",
@@ -317,6 +317,8 @@ fun SettingsScreen(
         // ABOUT
         val uriHandler = LocalUriHandler.current
         SettingsSection(title = "About") {
+
+            // Author
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -590,7 +592,7 @@ private fun ColorPickerDialog(
                         .clip(MaterialTheme.shapes.medium)
                 )
 
-                // Hue slider
+                // hue slider
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         "Hue",
@@ -682,7 +684,6 @@ private fun SaturationValueBox(
             // transparent-to-black vertical gradient (darkness)
             drawRect(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
 
-            // Thumb
             val thumbX = saturation * size.width
             val thumbY = (1f - value) * size.height
             drawCircle(color = Color.White, radius = 10.dp.toPx(), center = Offset(thumbX, thumbY))

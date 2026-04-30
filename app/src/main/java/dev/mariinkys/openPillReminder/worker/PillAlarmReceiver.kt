@@ -37,7 +37,7 @@ class PillAlarmReceiver : BroadcastReceiver() {
                     }
                 }
 
-                // Schedule tomorrow's alarm
+                // schedule tomorrow's alarm
                 ReminderScheduler.schedulePillReminder(context, settings.reminderTime)
             } finally {
                 pendingResult.finish()
