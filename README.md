@@ -15,6 +15,17 @@
   # [Android will become a locked-down platform, FIGHT BACK!](https://keepandroidopen.org/)
 </div>
 
+## Installation
+
+<div align="center">
+  <a href="https://github.com/mariinkys/OpenPillReminder/releases/latest">
+    <img src="resources/badges/badge_github.png" alt="Get it on GitHub" width="320" />
+  </a>
+  <a href="https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/mariinkys/OpenPillReminder">
+    <img src="resources/badges/badge_obtainium.png" alt="Get it on Obtainium" width="320" />
+  </a>
+</div>
+
 ## App Description
 
 Open Pill Reminder is a simple and reliable way to stay on track with your birth control routine. Setup takes just a moment; select the type of pill pack you use (number of pills) and choose the time you usually take your pill. From there, Open Pill Reminder will send you discreet notifications so you never miss a dose. You can also easily view the status of your current pack at any time.
