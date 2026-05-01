@@ -11,8 +11,8 @@
 
   <h3>OpenPillReminder is an open source lady pill tracker for Android</h3>
 
-  <img alt="Main Window" width="320" src="resources/screenshots/main-light.png"/>
-  <img alt="Settings Window" width="320" src="resources/screenshots/settings-light.png"/>
+  <img alt="Main Window" width="320" src="resources/screenshots/en/main-light.png"/>
+  <img alt="Settings Window" width="320" src="resources/screenshots/en/settings-light.png"/>
 
   # [Android will become a locked-down platform, FIGHT BACK!](https://keepandroidopen.org/)
 </div>
