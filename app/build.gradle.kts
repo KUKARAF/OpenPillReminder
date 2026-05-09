@@ -5,6 +5,9 @@ plugins {
 
 android {
     namespace = "dev.mariinkys.openPillReminder"
+
+    buildToolsVersion = "35.0.0"
+
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -33,7 +36,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
