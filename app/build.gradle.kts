@@ -7,20 +7,18 @@ android {
     namespace = "dev.mariinkys.openPillReminder"
 
     //https://developer.android.com/tools/releases/build-tools
-    buildToolsVersion = "36.0.0"
+    buildToolsVersion = "37.0.0"
 
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "dev.mariinkys.OpenPillReminder"
         minSdk = 26
-        targetSdk = 36
-        versionCode = 6
-        versionName = "1.0.5"
+        targetSdk = 37
+        versionCode = 7
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
