@@ -69,6 +69,9 @@ object BackupManager {
                 SettingsKeys.REMINDER_MINUTE.let { key ->
                     if (data.has(key.name)) prefs[key] = data.getInt(key.name)
                 }
+                SettingsKeys.RE_NOTIFY_INTERVAL.let { key ->
+                    if (data.has(key.name)) prefs[key] = data.getInt(key.name)
+                }
                 SettingsKeys.BUYING_REMINDER.let { key ->
                     if (data.has(key.name)) prefs[key] = data.getBoolean(key.name)
                 }

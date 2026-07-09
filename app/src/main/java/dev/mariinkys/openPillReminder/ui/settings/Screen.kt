@@ -165,6 +165,26 @@ fun SettingsScreen(
                     Text(settings.reminderTime.format(DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT).withLocale(locale)))
                 }
             }
+
+            var reNotifyText by remember(settings.reNotifyInterval) {
+                mutableStateOf(settings.reNotifyInterval.toString())
+            }
+            OutlinedTextField(
+                value = reNotifyText,
+                onValueChange = { raw ->
+                    val digits = raw.filter { it.isDigit() }.take(3)
+                    reNotifyText = digits
+                    val parsed = digits.toIntOrNull()
+                    if (parsed != null && parsed in 5..240 && parsed != settings.reNotifyInterval) {
+                        onSettingsChange(settings.copy(reNotifyInterval = parsed))
+                    }
+                },
+                label = { Text(stringResource(R.string.re_notify_interval)) },
+                supportingText = { Text(stringResource(R.string.re_notify_interval_helper)) },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
+            )
         }
 
         // PILL BUYING REMINDER

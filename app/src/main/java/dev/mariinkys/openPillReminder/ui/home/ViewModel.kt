@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dev.mariinkys.openPillReminder.data.PillLogRepository
 import dev.mariinkys.openPillReminder.model.PillLog
+import dev.mariinkys.openPillReminder.worker.ReminderScheduler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -24,6 +25,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun saveLog(log: PillLog) {
         viewModelScope.launch {
             repository.saveLog(log)
+            if (log.taken && log.date == LocalDate.now()) {
+                ReminderScheduler.cancelRepeatingPillReminder(getApplication())
+            }
         }
     }
 }

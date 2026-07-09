@@ -14,6 +14,7 @@ data class SettingsState(
     val placebo: Boolean = false,
     val firstPillDate: LocalDate = LocalDate.now(),
     val reminderTime: LocalTime = LocalTime.of(8, 0),
+    val reNotifyInterval: Int = 30,
     val buyingReminder: Boolean = false,
     val buyingReminderSchedule: BuyingReminderSchedule = BuyingReminderSchedule.FirstPillDate,
     val buyingReminderTime: LocalTime = LocalTime.of(8, 0),

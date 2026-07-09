@@ -6,6 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import dev.mariinkys.openPillReminder.worker.PillAlarmReceiver
+import dev.mariinkys.openPillReminder.worker.ReminderScheduler
 import java.time.LocalDate
 
 const val CHANNEL_ID = "pill_reminder_channel"
@@ -46,6 +48,26 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         namePart
     )
 
+    val snooze1hIntent = Intent(context, PillAlarmReceiver::class.java).apply {
+        putExtra(ReminderScheduler.EXTRA_SNOOZE_MINUTES, 60)
+    }
+    val snooze1hPending = PendingIntent.getBroadcast(
+        context,
+        ReminderScheduler.SNOOZE_1H_REQUEST_CODE,
+        snooze1hIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val snooze2hIntent = Intent(context, PillAlarmReceiver::class.java).apply {
+        putExtra(ReminderScheduler.EXTRA_SNOOZE_MINUTES, 120)
+    }
+    val snooze2hPending = PendingIntent.getBroadcast(
+        context,
+        ReminderScheduler.SNOOZE_2H_REQUEST_CODE,
+        snooze2hIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_stat_name)
         .setContentTitle(title)
@@ -53,6 +75,8 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         .setContentIntent(pendingIntent)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setAutoCancel(true)
+        .addAction(0, context.getString(R.string.notif_action_remind_1h), snooze1hPending)
+        .addAction(0, context.getString(R.string.notif_action_remind_2h), snooze2hPending)
         .build()
 
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

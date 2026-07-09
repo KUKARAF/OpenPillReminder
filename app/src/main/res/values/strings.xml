@@ -43,6 +43,10 @@
     <string name="placebo_desc">Reminds you to take non-active pills so you don\'t lose the habit.</string>
     <string name="first_pill_date">First Pill Date</string>
     <string name="reminder_time">Reminder Time</string>
+    <string name="re_notify_interval">Re-notify interval (min)</string>
+    <string name="re_notify_interval_helper">Minutes between reminders until pill is marked taken (5–240)</string>
+    <string name="notif_action_remind_1h">Remind 1H</string>
+    <string name="notif_action_remind_2h">Remind 2H</string>
     <string name="buying_reminder">Enable Buying Reminder</string>
     <string name="reminder_day">Reminder Day</string>
     <string name="theme_mode">Theme Mode</string>
