@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import dev.mariinkys.openPillReminder.data.PillLogRepository
 import dev.mariinkys.openPillReminder.data.SettingsRepository
+import dev.mariinkys.openPillReminder.model.PillLog
 import dev.mariinkys.openPillReminder.sendPillNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +19,21 @@ class PillAlarmReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         val isRenotify = intent.getBooleanExtra(ReminderScheduler.EXTRA_IS_RENOTIFY, false)
         val snoozeMinutes = intent.getIntExtra(ReminderScheduler.EXTRA_SNOOZE_MINUTES, 0)
+        val markTaken = intent.getBooleanExtra(ReminderScheduler.EXTRA_MARK_TAKEN, false)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                // Taken action: log today's pill as taken, dismiss the notification
+                // and stop the re-notify chain. Does not touch tomorrow's daily.
+                if (markTaken) {
+                    val repository = PillLogRepository(context)
+                    val today = LocalDate.now()
+                    val existing = repository.pillLogsFlow.first()[today]
+                    repository.saveLog(existing?.copy(taken = true) ?: PillLog(date = today, taken = true))
+                    ReminderScheduler.cancelRepeatingPillReminder(context)
+                    return@launch
+                }
+
                 // Snooze action: dismiss current notification and reschedule the re-notify chain
                 // to fire once at now + snoozeMinutes. Does not touch tomorrow's daily.
                 if (snoozeMinutes > 0) {

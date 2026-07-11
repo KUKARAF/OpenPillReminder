@@ -14,10 +14,11 @@ object ReminderScheduler {
     private const val BUYING_ALARM_REQUEST_CODE = 1002
     const val RENOTIFY_REQUEST_CODE = 1003
     const val SNOOZE_1H_REQUEST_CODE = 1004
-    const val SNOOZE_2H_REQUEST_CODE = 1005
+    const val TAKEN_REQUEST_CODE = 1006
 
     const val EXTRA_IS_RENOTIFY = "is_renotify"
     const val EXTRA_SNOOZE_MINUTES = "snooze_minutes"
+    const val EXTRA_MARK_TAKEN = "mark_taken"
 
     fun schedulePillReminder(context: Context, reminderTime: LocalTime) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

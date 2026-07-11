@@ -48,6 +48,16 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         namePart
     )
 
+    val takenIntent = Intent(context, PillAlarmReceiver::class.java).apply {
+        putExtra(ReminderScheduler.EXTRA_MARK_TAKEN, true)
+    }
+    val takenPending = PendingIntent.getBroadcast(
+        context,
+        ReminderScheduler.TAKEN_REQUEST_CODE,
+        takenIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
     val snooze1hIntent = Intent(context, PillAlarmReceiver::class.java).apply {
         putExtra(ReminderScheduler.EXTRA_SNOOZE_MINUTES, 60)
     }
@@ -58,16 +68,6 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
-    val snooze2hIntent = Intent(context, PillAlarmReceiver::class.java).apply {
-        putExtra(ReminderScheduler.EXTRA_SNOOZE_MINUTES, 120)
-    }
-    val snooze2hPending = PendingIntent.getBroadcast(
-        context,
-        ReminderScheduler.SNOOZE_2H_REQUEST_CODE,
-        snooze2hIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    )
-
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_stat_name)
         .setContentTitle(title)
@@ -75,8 +75,8 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         .setContentIntent(pendingIntent)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setAutoCancel(true)
+        .addAction(0, context.getString(R.string.notif_action_taken), takenPending)
         .addAction(0, context.getString(R.string.notif_action_remind_1h), snooze1hPending)
-        .addAction(0, context.getString(R.string.notif_action_remind_2h), snooze2hPending)
         .build()
 
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
