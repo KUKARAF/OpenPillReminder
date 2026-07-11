@@ -72,6 +72,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         repository.saveSettings(settings)
         ReminderScheduler.schedulePillReminder(getApplication(), settings.reminderTime)
 
+        if (!settings.keepReminding) {
+            ReminderScheduler.cancelReNotifyAlarm(getApplication())
+        }
+
         if (settings.buyingReminder) {
             ReminderScheduler.scheduleBuyingReminder(getApplication(), settings.buyingReminderTime)
         } else {

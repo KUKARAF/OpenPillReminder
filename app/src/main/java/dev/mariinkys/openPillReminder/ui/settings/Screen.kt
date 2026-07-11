@@ -51,6 +51,7 @@ import dev.mariinkys.openPillReminder.model.toDisplayString
 import dev.mariinkys.openPillReminder.R
 import dev.mariinkys.openPillReminder.model.toLocalizedDisplayString
 import java.time.Instant
+import kotlin.math.roundToInt
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -166,25 +167,33 @@ fun SettingsScreen(
                 }
             }
 
-            var reNotifyText by remember(settings.reNotifyInterval) {
-                mutableStateOf(settings.reNotifyInterval.toString())
-            }
-            OutlinedTextField(
-                value = reNotifyText,
-                onValueChange = { raw ->
-                    val digits = raw.filter { it.isDigit() }.take(3)
-                    reNotifyText = digits
-                    val parsed = digits.toIntOrNull()
-                    if (parsed != null && parsed in 5..240 && parsed != settings.reNotifyInterval) {
-                        onSettingsChange(settings.copy(reNotifyInterval = parsed))
-                    }
-                },
-                label = { Text(stringResource(R.string.re_notify_interval)) },
-                supportingText = { Text(stringResource(R.string.re_notify_interval_helper)) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true
+            SettingsSwitchRow(
+                label = stringResource(R.string.keep_reminding),
+                checked = settings.keepReminding,
+                onCheckedChange = { onSettingsChange(settings.copy(keepReminding = it)) },
+                description = stringResource(R.string.keep_reminding_desc)
             )
+
+            if (settings.keepReminding) {
+                Column {
+                    Text(
+                        text = stringResource(R.string.re_notify_every, settings.reNotifyInterval),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Slider(
+                        value = settings.reNotifyInterval.toFloat(),
+                        onValueChange = { value ->
+                            val minutes = value.roundToInt()
+                            if (minutes != settings.reNotifyInterval) {
+                                onSettingsChange(settings.copy(reNotifyInterval = minutes))
+                            }
+                        },
+                        valueRange = 30f..240f,
+                        steps = 41,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
 
         // PILL BUYING REMINDER

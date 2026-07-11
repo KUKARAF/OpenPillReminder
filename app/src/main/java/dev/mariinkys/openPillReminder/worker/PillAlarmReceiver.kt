@@ -47,7 +47,9 @@ class PillAlarmReceiver : BroadcastReceiver() {
                     if (!alreadyTaken && (!isBreakDay || settings.placebo)) {
                         sendPillNotification(context, settings.userName, isBreakDay, today)
                         // Chain the next re-notification until the pill is marked taken.
-                        ReminderScheduler.scheduleReNotify(context, settings.reNotifyInterval)
+                        if (settings.keepReminding) {
+                            ReminderScheduler.scheduleReNotify(context, settings.reNotifyInterval)
+                        }
                     }
                 }
 

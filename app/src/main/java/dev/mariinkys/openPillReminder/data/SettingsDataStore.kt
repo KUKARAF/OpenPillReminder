@@ -27,6 +27,7 @@ object SettingsKeys {
     val FIRST_PILL_DATE = stringPreferencesKey("first_pill_date")
     val REMINDER_HOUR = intPreferencesKey("reminder_hour")
     val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
+    val KEEP_REMINDING = booleanPreferencesKey("keep_reminding")
     val RE_NOTIFY_INTERVAL = intPreferencesKey("re_notify_interval")
     val BUYING_REMINDER = booleanPreferencesKey("buying_reminder")
     val BUYING_REMINDER_SCHEDULE = stringPreferencesKey("buying_reminder_schedule")
@@ -54,7 +55,8 @@ class SettingsRepository(private val context: Context) {
                 prefs[SettingsKeys.REMINDER_HOUR] ?: 8,
                 prefs[SettingsKeys.REMINDER_MINUTE] ?: 0
             ),
-            reNotifyInterval = prefs[SettingsKeys.RE_NOTIFY_INTERVAL] ?: 30,
+            keepReminding = prefs[SettingsKeys.KEEP_REMINDING] ?: true,
+            reNotifyInterval = (prefs[SettingsKeys.RE_NOTIFY_INTERVAL] ?: 30).coerceIn(30, 240),
             buyingReminder = prefs[SettingsKeys.BUYING_REMINDER] ?: false,
             buyingReminderSchedule = BuyingReminderSchedule.valueOf(prefs[SettingsKeys.BUYING_REMINDER_SCHEDULE] ?: BuyingReminderSchedule.FirstPillDate.name),
             buyingReminderTime = LocalTime.of(
@@ -78,7 +80,8 @@ class SettingsRepository(private val context: Context) {
             prefs[SettingsKeys.FIRST_PILL_DATE] = settings.firstPillDate.toString()
             prefs[SettingsKeys.REMINDER_HOUR] = settings.reminderTime.hour
             prefs[SettingsKeys.REMINDER_MINUTE] = settings.reminderTime.minute
-            prefs[SettingsKeys.RE_NOTIFY_INTERVAL] = settings.reNotifyInterval
+            prefs[SettingsKeys.KEEP_REMINDING] = settings.keepReminding
+            prefs[SettingsKeys.RE_NOTIFY_INTERVAL] = settings.reNotifyInterval.coerceIn(30, 240)
             prefs[SettingsKeys.BUYING_REMINDER] = settings.buyingReminder
             prefs[SettingsKeys.BUYING_REMINDER_SCHEDULE] = settings.buyingReminderSchedule.name
             prefs[SettingsKeys.BUYING_REMINDER_HOUR] = settings.buyingReminderTime.hour

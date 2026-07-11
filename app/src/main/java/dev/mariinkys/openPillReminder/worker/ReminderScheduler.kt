@@ -74,7 +74,7 @@ object ReminderScheduler {
         }
     }
 
-    fun cancelRepeatingPillReminder(context: Context) {
+    fun cancelReNotifyAlarm(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, PillAlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
@@ -84,6 +84,10 @@ object ReminderScheduler {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.cancel(pendingIntent)
+    }
+
+    fun cancelRepeatingPillReminder(context: Context) {
+        cancelReNotifyAlarm(context)
 
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
         nm.cancel(1)
